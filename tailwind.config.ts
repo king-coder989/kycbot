@@ -47,7 +47,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // KYCbot custom colors
+        // KYCbot custom colors from logo
         teal: {
           DEFAULT: "hsl(var(--teal))",
           600: "hsl(var(--teal-600))",
@@ -56,6 +56,10 @@ export default {
         lemon: {
           DEFAULT: "hsl(var(--lemon))",
           soft: "hsl(var(--lemon-soft))",
+        },
+        navy: {
+          DEFAULT: "hsl(var(--navy))",
+          soft: "hsl(var(--navy-soft))",
         },
         ui: {
           DEFAULT: "hsl(var(--ui))",

@@ -4,6 +4,7 @@ import { SessionList, Session } from "@/components/SessionList";
 import { ReviewPanel, FieldData } from "@/components/ReviewPanel";
 import { MetricsStrip } from "@/components/MetricsStrip";
 import { toast } from "sonner";
+import kycbotLogo from "@/assets/kycbot-logo.jpeg";
 
 // Mock data
 const MOCK_SESSIONS: Session[] = [
@@ -154,11 +155,8 @@ const Index = () => {
       <header className="border-b border-border bg-background">
         <div className="px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-lemon to-teal flex items-center justify-center">
-              <span className="text-lg font-bold text-foreground">K</span>
-            </div>
+            <img src={kycbotLogo} alt="KYCbot Logo" className="h-12 w-auto" />
             <div>
-              <h1 className="text-xl font-bold text-foreground">KYCbot</h1>
               <p className="text-xs text-muted-foreground">MCP Compliance Server v2.0</p>
             </div>
           </div>

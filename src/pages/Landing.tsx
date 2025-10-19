@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Shield, Zap, Eye, Lock, TrendingUp, CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import kycbotLogo from "@/assets/kycbot-logo.jpeg";
 
 const Landing = () => {
   const features = [
@@ -46,9 +47,8 @@ const Landing = () => {
       {/* Header */}
       <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Shield className="h-6 w-6 text-teal" />
-            <span className="text-xl font-bold text-foreground">KYCbot</span>
+          <div className="flex items-center gap-3">
+            <img src={kycbotLogo} alt="KYCbot Logo" className="h-10 w-auto" />
           </div>
           <nav className="flex items-center gap-6">
             <Link to="/dashboard" className="text-sm font-medium text-foreground hover:text-teal transition-colors">
@@ -194,8 +194,7 @@ const Landing = () => {
         <div className="container">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-teal" />
-              <span className="text-sm font-medium text-foreground">KYCbot</span>
+              <img src={kycbotLogo} alt="KYCbot Logo" className="h-8 w-auto" />
             </div>
             <p className="text-sm text-muted-foreground">
               © 2025 KYCbot. AI-Driven Compliance Engine.
