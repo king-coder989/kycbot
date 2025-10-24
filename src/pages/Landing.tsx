@@ -48,7 +48,7 @@ const Landing = () => {
       <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={kycbotLogo} alt="KYCbot Logo" className="h-10 w-auto" />
+            <img src={kycbotLogo} alt="KYCbot Logo" className="h-16 w-auto rounded-lg shadow-md" />
           </div>
           <nav className="flex items-center gap-6">
             <Link to="/dashboard" className="text-sm font-medium text-foreground hover:text-teal transition-colors">
@@ -194,7 +194,7 @@ const Landing = () => {
         <div className="container">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <img src={kycbotLogo} alt="KYCbot Logo" className="h-8 w-auto" />
+              <img src={kycbotLogo} alt="KYCbot Logo" className="h-12 w-auto rounded-lg" />
             </div>
             <p className="text-sm text-muted-foreground">
               © 2025 KYCbot. AI-Driven Compliance Engine.

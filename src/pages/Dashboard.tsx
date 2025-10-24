@@ -154,8 +154,8 @@ const Index = () => {
       {/* Top Bar */}
       <header className="border-b border-border bg-background">
         <div className="px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={kycbotLogo} alt="KYCbot Logo" className="h-12 w-auto" />
+          <div className="flex items-center gap-4">
+            <img src={kycbotLogo} alt="KYCbot Logo" className="h-20 w-auto rounded-lg shadow-md" />
             <div>
               <p className="text-xs text-muted-foreground">MCP Compliance Server v2.0</p>
             </div>
