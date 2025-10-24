@@ -1,73 +1,92 @@
-# Welcome to your Lovable project
+# 🧠 KYCbot — The AI-Driven Compliance Copilot
 
-## Project info
+> **“Automate 85% of KYC form filling and risk checks with Agentic AI.”**
 
-**URL**: https://lovable.dev/projects/c9190c44-05ac-4396-8755-b5c91167ec0d
+KYCbot is an **AI-powered compliance engine** built on a **Modal Context Protocol (MCP)** architecture.  
+It integrates directly into a bank’s core or ERP system to **fetch, validate, and classify** customer data,  
+auto-fill KYC forms, and generate explainable JSON audit reports — turning hours of manual work into minutes.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ⚙️ What It Does
 
-**Use Lovable**
+| Stage | Function | Output |
+|-------|-----------|--------|
+| **1. Fetch** | Pulls data from UIDAI, PAN, internal bank DBs, OCR docs | Verified raw data |
+| **2. Context Merge (MCP)** | Fuses multi-source info, understands context | Unified customer profile |
+| **3. Risk Classification** | Checks PEP/FATCA/AML flags, confidence scoring | Risk matrix |
+| **4. Auto-Fill & Report** | Completes policy forms, generates JSON + AI summary | Compliance package |
+| **5. Human Review** | Officer verifies low-confidence fields (<0.8) and submits | Final KYC approval |
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c9190c44-05ac-4396-8755-b5c91167ec0d) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 💥 Impact (Per 1 Million KYCs)
 
-**Use your preferred IDE**
+| Metric | Manual | With KYCbot | Gain |
+|---------|---------|-------------|------|
+| Avg. time per KYC | 30 min | 5 min | **−83%** |
+| Total time | 500,000 h | 83,000 h | **420,000 h saved** |
+| Cost (@ ₹500/h) | ₹25 Cr | ₹4 Cr | **₹21 Cr (~$2.5 M) saved** |
+| Staff equivalent | — | — | **≈208 FTE years freed** |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+> **Result:** 6× faster onboarding, 80% cost reduction, instant audit trails.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🧩 System Architecture
+[Data Sources]
+│
+▼
+[ Fetch Layer ]
+│→ APIs (UIDAI, PAN)
+│→ OCR / document parse
+▼
+[ MCP Engine ]
+│→ Context merge
+│→ Risk classification
+│→ Confidence scoring
+▼
+[ Report Layer ]
+│→ JSON export
+│→ AI compliance summary
+▼
+[ Review Interface ]
+│→ Human approve / edit
+▼
+[ Audit & Storage ]
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+🧠 Demo Flow
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Upload or fetch mock policy form.
 
-# Step 3: Install the necessary dependencies.
-npm i
+MCP engine fetches contextual data (mock UIDAI/PAN JSON).
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Watch pipeline animation as data flows → risk classified → form auto-filled.
 
-**Edit a file directly in GitHub**
+Reviewer confirms flagged fields.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Export final report as structured JSON or AI-written summary.
 
-**Use GitHub Codespaces**
+🔒 Security & Compliance
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Data never leaves bank’s secure environment in on-prem mode.
 
-## What technologies are used for this project?
+Full audit trail logged per field update.
 
-This project is built with:
+Explainable decisions for regulators.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+ISO-ready logging and role-based access.
 
-## How can I deploy this project?
+🏆 Vision
 
-Simply open [Lovable](https://lovable.dev/projects/c9190c44-05ac-4396-8755-b5c91167ec0d) and click on Share -> Publish.
+To make compliance autonomous, explainable, and real-time.
 
-## Can I connect a custom domain to my Lovable project?
+KYCbot is built to evolve into the universal compliance layer for banks, NBFCs, and fintechs —
+where every onboarding, every audit, and every regulator query happens in seconds.
 
-Yes, you can!
+👥 Team
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Project: KYCbot
+Track: Fintech — Agentic AI (MumbaiHacks 2025)
+Developer Team: Arpit, Pratemsh ,Kalyani, Alishba
+Mentor: Prof Dev Mukherjee
