@@ -54,8 +54,11 @@ const Landing = () => {
             <Link to="/dashboard" className="text-sm font-medium text-foreground hover:text-teal transition-colors">
               Dashboard
             </Link>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/login">Sign In</Link>
+            </Button>
             <Button asChild size="sm" className="bg-teal hover:bg-teal-600 text-white">
-              <Link to="/dashboard">Get Started</Link>
+              <Link to="/login">Get Started</Link>
             </Button>
           </nav>
         </div>

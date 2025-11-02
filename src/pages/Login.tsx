@@ -1,12 +1,16 @@
 // Inspired by 'the_coding_wizard.js' GSAP animation (Login Lamp) for this project
 
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 gsap.registerPlugin(Draggable);
 
@@ -15,12 +19,34 @@ const PULL_THRESHOLD = 50;
 
 export default function Login() {
   const [isLampOn, setIsLampOn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const cordRef = useRef<SVGLineElement>(null);
   const lampRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const pullHandleRef = useRef<HTMLDivElement>(null);
   const startPosRef = useRef({ x: 0, y: 0 });
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/dashboard");
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        navigate("/dashboard");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   useEffect(() => {
     if (!pullHandleRef.current) return;
@@ -93,6 +119,59 @@ export default function Login() {
         ease: "back.out(1.7)" 
       }
     );
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      toast({
+        title: "Login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success!",
+        description: "Welcome back!",
+      });
+    }
+
+    setLoading(false);
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (error) {
+      toast({
+        title: "Signup failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Account created!",
+        description: "You can now log in.",
+      });
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -207,40 +286,106 @@ export default function Login() {
               <CardTitle className="text-2xl">Welcome Back</CardTitle>
               <CardDescription>Enter your credentials to continue</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
-                <Input 
-                  id="username" 
-                  type="text" 
-                  placeholder="Enter your username"
-                  className="transition-all duration-300"
-                  style={{
-                    boxShadow: isLampOn ? "0 0 10px hsl(var(--teal) / 0.1)" : undefined
-                  }}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input 
-                  id="password" 
-                  type="password" 
-                  placeholder="Enter your password"
-                  className="transition-all duration-300"
-                  style={{
-                    boxShadow: isLampOn ? "0 0 10px hsl(var(--teal) / 0.1)" : undefined
-                  }}
-                />
-              </div>
-              <Button 
-                className="w-full mt-6"
-                style={{
-                  background: isLampOn ? "hsl(var(--teal))" : undefined,
-                  boxShadow: isLampOn ? "0 4px 20px hsl(var(--teal) / 0.4)" : undefined
-                }}
-              >
-                Login
-              </Button>
+            <CardContent>
+              <Tabs defaultValue="login" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-4">
+                  <TabsTrigger value="login">Login</TabsTrigger>
+                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="login">
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="login-email">Email</Label>
+                      <Input 
+                        id="login-email" 
+                        type="email" 
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="transition-all duration-300"
+                        style={{
+                          boxShadow: isLampOn ? "0 0 10px hsl(var(--teal) / 0.1)" : undefined
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="login-password">Password</Label>
+                      <Input 
+                        id="login-password" 
+                        type="password" 
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="transition-all duration-300"
+                        style={{
+                          boxShadow: isLampOn ? "0 0 10px hsl(var(--teal) / 0.1)" : undefined
+                        }}
+                      />
+                    </div>
+                    <Button 
+                      type="submit"
+                      className="w-full mt-6"
+                      disabled={loading}
+                      style={{
+                        background: isLampOn ? "hsl(var(--teal))" : undefined,
+                        boxShadow: isLampOn ? "0 4px 20px hsl(var(--teal) / 0.4)" : undefined
+                      }}
+                    >
+                      {loading ? "Logging in..." : "Login"}
+                    </Button>
+                  </form>
+                </TabsContent>
+
+                <TabsContent value="signup">
+                  <form onSubmit={handleSignup} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-email">Email</Label>
+                      <Input 
+                        id="signup-email" 
+                        type="email" 
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="transition-all duration-300"
+                        style={{
+                          boxShadow: isLampOn ? "0 0 10px hsl(var(--teal) / 0.1)" : undefined
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-password">Password</Label>
+                      <Input 
+                        id="signup-password" 
+                        type="password" 
+                        placeholder="Create a password (min 6 characters)"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={6}
+                        className="transition-all duration-300"
+                        style={{
+                          boxShadow: isLampOn ? "0 0 10px hsl(var(--teal) / 0.1)" : undefined
+                        }}
+                      />
+                    </div>
+                    <Button 
+                      type="submit"
+                      className="w-full mt-6"
+                      disabled={loading}
+                      style={{
+                        background: isLampOn ? "hsl(var(--teal))" : undefined,
+                        boxShadow: isLampOn ? "0 4px 20px hsl(var(--teal) / 0.4)" : undefined
+                      }}
+                    >
+                      {loading ? "Creating account..." : "Sign Up"}
+                    </Button>
+                  </form>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </div>

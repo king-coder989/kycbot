@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { PipelineCanvas } from "@/components/PipelineCanvas";
 import { SessionList, Session } from "@/components/SessionList";
 import { ReviewPanel, FieldData } from "@/components/ReviewPanel";
 import { MetricsStrip } from "@/components/MetricsStrip";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 import kycbotLogo from "@/assets/kycbot-logo.jpeg";
 
 // Mock data
@@ -111,6 +114,27 @@ const MOCK_FIELDS: Record<string, FieldData[]> = {
 const Index = () => {
   const [selectedSessionId, setSelectedSessionId] = useState<string>("sess_002");
   const [processingStages, setProcessingStages] = useState<string[]>(["ingest", "enrich"]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  // Check authentication
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        navigate("/login");
+      } else {
+        setLoading(false);
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        navigate("/login");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const selectedSession = MOCK_SESSIONS.find((s) => s.id === selectedSessionId);
   const selectedFields = selectedSessionId ? MOCK_FIELDS[selectedSessionId] : [];
@@ -149,6 +173,20 @@ const Index = () => {
     });
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-lg text-foreground">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full bg-background">
       {/* Top Bar */}
@@ -168,6 +206,9 @@ const Index = () => {
               <div className="text-xs text-muted-foreground">Operator</div>
               <div className="text-sm font-semibold text-foreground">Admin User</div>
             </div>
+            <Button variant="outline" size="sm" onClick={handleLogout}>
+              Logout
+            </Button>
           </div>
         </div>
       </header>
